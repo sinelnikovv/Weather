@@ -4,10 +4,10 @@
     "slug": "Weather",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon.png",
+    "icon": "./src/assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/splashScreen.png",
+      "image": "./src/assets/images/splashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#7B61FF"
     },
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/icon.png",
+        "foregroundImage": "./src/assets/images/icon.png",
         "backgroundColor": "#7B61FF"
       },
       "package": "com.WeatherForecast"

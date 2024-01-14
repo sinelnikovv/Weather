@@ -7,8 +7,16 @@ const RootStack = createStackNavigator();
 const RootNavigator = () => {
   return (
     <RootStack.Navigator initialRouteName='Home'>
-      <RootStack.Screen name='Home' component={HomeScreen} />
-      <RootStack.Screen name='Cities' component={CitiesScreen} />
+      <RootStack.Screen
+        options={{ headerShown: false }}
+        name='Home'
+        component={HomeScreen}
+      />
+      <RootStack.Screen
+        name='Cities'
+        component={CitiesScreen}
+        options={{ title: "Weather" }}
+      />
     </RootStack.Navigator>
   );
 };
