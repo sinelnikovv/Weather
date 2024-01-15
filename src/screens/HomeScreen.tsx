@@ -1,6 +1,8 @@
 import { StyleSheet, View, ImageBackground } from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
 import MainInfo from "../components/MainInfo";
+import Tabbar from "../components/TabBar";
+import { moderateScale } from "react-native-size-matters";
 
 const HomeScreen = () => {
   return (
@@ -11,7 +13,20 @@ const HomeScreen = () => {
         style={styles.backgroung}
       >
         <ScreenWrapper>
-          <MainInfo city={"Monreal"} currentTemp='19' weather='Mostly Clear' />
+          <View
+            style={{
+              justifyContent: "space-between",
+              flex: 1,
+              marginHorizontal: moderateScale(-16),
+            }}
+          >
+            <MainInfo
+              city={"Monreal"}
+              currentTemp='19'
+              weather='Mostly Clear'
+            />
+            <Tabbar />
+          </View>
         </ScreenWrapper>
       </ImageBackground>
     </View>
