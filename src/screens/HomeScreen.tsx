@@ -20,11 +20,14 @@ const HomeScreen = () => {
               marginHorizontal: moderateScale(-16),
             }}
           >
-            <MainInfo
-              city={"Monreal"}
-              currentTemp='19'
-              weather='Mostly Clear'
-            />
+            <View style={{ marginTop: moderateScale(50) }}>
+              <MainInfo
+                city={"Monreal"}
+                currentTemp='19'
+                weather='Mostly Clear'
+              />
+            </View>
+
             <Tabbar />
           </View>
         </ScreenWrapper>
