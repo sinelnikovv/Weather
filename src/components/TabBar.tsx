@@ -7,15 +7,13 @@ import ListIcon from "../assets/svg/List.svg";
 
 const Tabbar = () => {
   return (
-    <View style={{ height: moderateScale(100) }}>
+    <View style={{ height: moderateScale(100), zIndex: 2 }}>
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           marginHorizontal: moderateScale(32),
           alignItems: "center",
-          // marginTop: moderateScale(12),
-          zIndex: 2,
         }}
       >
         <Pressable>
@@ -28,7 +26,7 @@ const Tabbar = () => {
           <ListIcon />
         </Pressable>
       </View>
-      <View style={{ position: "absolute" }}>
+      <View style={{ position: "absolute", zIndex: -1 }}>
         <TabBarBackground height={moderateScale(100)} />
       </View>
     </View>
