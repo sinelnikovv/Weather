@@ -4,19 +4,23 @@ import MainInfo from "../components/MainInfo";
 import Tabbar from "../components/TabBar";
 import { moderateScale } from "react-native-size-matters";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
+import { useGetWeatherQuery } from "../store/reducers/weather";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+  const location = useSelector((state: RootState) => state.location);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(
     () => [moderateScale(325), moderateScale(700)],
     [],
   );
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
-  }, []);
+  const { data, refetch } = useGetWeatherQuery(location);
+
+  const handleSheetChanges = useCallback((index: number) => {}, []);
 
   return (
     <View style={styles.container}>
@@ -33,11 +37,13 @@ const HomeScreen = () => {
             }}
           >
             <View style={{ marginTop: moderateScale(50) }}>
-              <MainInfo
-                city={"Monreal"}
-                currentTemp='19'
-                weather='Mostly Clear'
-              />
+              {!!data ? (
+                <MainInfo
+                  city={data.timezone.split("/")[1]}
+                  currentTemp={data.current.temp}
+                  weather={data.current.weather[0].main}
+                />
+              ) : null}
             </View>
             <View style={styles.containerSheet}>
               <BottomSheet
@@ -119,7 +125,7 @@ const HomeScreen = () => {
               </BottomSheet>
             </View>
             <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
-              <Tabbar />
+              <Tabbar navigation={navigation} />
             </View>
           </View>
         </ScreenWrapper>

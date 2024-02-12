@@ -6,6 +6,9 @@ import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { store } from "./src/store";
+import * as Location from "expo-location";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,10 +21,19 @@ export default function App() {
     "Signika-Bold": require("./src/assets/fonts/SignikaNegative-Bold.ttf"),
   });
 
+  const requestLocationPermission = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+    } catch (error) {
+      console.error("Error requesting location permission:", error);
+    }
+  };
+
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
+    requestLocationPermission();
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
@@ -38,16 +50,18 @@ export default function App() {
     );
   } else {
     return (
-      <SafeAreaProvider>
-        <StatusBar
-          barStyle='light-content'
-          translucent
-          backgroundColor='transparent'
-        />
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <StatusBar
+            barStyle='light-content'
+            translucent
+            backgroundColor='transparent'
+          />
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </Provider>
     );
   }
 }

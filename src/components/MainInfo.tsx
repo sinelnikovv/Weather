@@ -5,7 +5,7 @@ import { moderateScale } from "react-native-size-matters";
 
 type Props = {
   city: string;
-  currentTemp: string;
+  currentTemp: number;
   weather: string;
 };
 const MainInfo = ({ city, currentTemp, weather }: Props) => {
@@ -19,7 +19,7 @@ const MainInfo = ({ city, currentTemp, weather }: Props) => {
         }}
       >
         <TextCustom size={84} family='Signika-Light'>
-          {currentTemp}&deg;
+          {currentTemp.toString().split(".")[0]}&deg;
         </TextCustom>
       </View>
 
