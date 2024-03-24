@@ -25,7 +25,7 @@ const MainInfo = ({ city, currentTemp, weather, maxTemp, minTemp }: Props) => {
         </TextCustom>
       </View>
 
-      <TextCustom color={colors.secondary} size={20} family='Signika-SemiBold'>
+      <TextCustom color={colors.greyDark} size={20} family='Signika-SemiBold'>
         {weather}
       </TextCustom>
       <TextCustom size={20} family='Signika-SemiBold'>

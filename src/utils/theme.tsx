@@ -1,8 +1,8 @@
 const colors = {
-  primary: "#fff",
-  secondary: "#EBEBF560",
-  tertiary: "#EBEBF530",
-  quaternary: "#EBEBF518",
+  white: "#fff",
+  greyDark: "#EBEBF560",
+  grey: "#EBEBF530",
+  greyLight: "#EBEBF518",
 };
 
 export default colors;

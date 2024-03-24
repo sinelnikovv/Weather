@@ -17,7 +17,7 @@ type Props = {
 const TextCustom = ({
   family = "Signika-Regular",
   size = 16,
-  color = colors.primary,
+  color = colors.white,
   textAlign = "center",
   children,
   style,
