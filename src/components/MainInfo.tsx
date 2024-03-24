@@ -7,8 +7,10 @@ type Props = {
   city: string;
   currentTemp: number;
   weather: string;
+  maxTemp: number;
+  minTemp: number;
 };
-const MainInfo = ({ city, currentTemp, weather }: Props) => {
+const MainInfo = ({ city, currentTemp, weather, maxTemp, minTemp }: Props) => {
   return (
     <View style={styles.container}>
       <TextCustom size={34}>{city}</TextCustom>
@@ -27,7 +29,8 @@ const MainInfo = ({ city, currentTemp, weather }: Props) => {
         {weather}
       </TextCustom>
       <TextCustom size={20} family='Signika-SemiBold'>
-        H: 17&deg; L:19&deg;
+        H: {Math.round(maxTemp).toString()} &deg; L:{" "}
+        {Math.round(minTemp).toString()}&deg;
       </TextCustom>
     </View>
   );

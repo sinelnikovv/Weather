@@ -7,18 +7,9 @@ import ListIcon from "../assets/svg/List.svg";
 import * as Location from "expo-location";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocation } from "../store/reducers/locationSlice";
-import { useEffect } from "react";
-import { useGetWeatherQuery } from "../store/reducers/weather";
-import { RootState } from "../store";
 
 const Tabbar = ({ navigation }) => {
-  const location = useSelector((state: RootState) => state.location);
   const dispatch = useDispatch();
-
-  const { refetch } = useGetWeatherQuery({
-    lat: location.lat,
-    lon: location.lon,
-  });
 
   const getLocation = async () => {
     try {
@@ -36,13 +27,6 @@ const Tabbar = ({ navigation }) => {
       console.error("Error requesting location permission:", error);
     }
   };
-
-  useEffect(() => {
-    getLocation();
-  }, []);
-  useEffect(() => {
-    refetch();
-  }, [location]);
 
   return (
     <View style={{ height: moderateScale(100), zIndex: 2 }}>

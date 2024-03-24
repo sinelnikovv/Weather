@@ -2,17 +2,18 @@ import { View, Image, StatusBar } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { store } from "./src/store";
 import * as Location from "expo-location";
+import { setLocation } from "./src/store/reducers/locationSlice";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
-export default function App() {
+const AppMain = () => {
   const [fontsLoaded] = useFonts({
     "Signika-Light": require("./src/assets/fonts/SignikaNegative-Light.ttf"),
     "Signika-Regular": require("./src/assets/fonts/SignikaNegative-Regular.ttf"),
@@ -29,11 +30,31 @@ export default function App() {
     }
   };
 
+  const dispatch = useDispatch();
+
+  const getLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        const currentLocation = await Location.getCurrentPositionAsync();
+        dispatch(
+          setLocation({
+            lat: currentLocation.coords.latitude,
+            lon: currentLocation.coords.longitude,
+          }),
+        );
+      }
+    } catch (error) {
+      console.error("Error requesting location permission:", error);
+    }
+  };
+
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
     requestLocationPermission();
+    getLocation();
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
@@ -50,18 +71,30 @@ export default function App() {
     );
   } else {
     return (
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <StatusBar
-            barStyle='light-content'
-            translucent
-            backgroundColor='transparent'
-          />
-          <NavigationContainer>
-            <RootNavigator />
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </Provider>
+      <>
+        <StatusBar
+          barStyle='light-content'
+          translucent
+          backgroundColor='transparent'
+        />
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </>
     );
   }
-}
+};
+
+const App = () => {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <AppMain />
+        </SafeAreaProvider>
+      </Provider>
+    </GestureHandlerRootView>
+  );
+};
+
+export default App;

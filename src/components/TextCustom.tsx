@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { StyleProp, Text, TextStyle } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import colors from "../utils/theme";
 type Props = {
@@ -11,29 +11,28 @@ type Props = {
   size?: number;
   color?: string;
   textAlign?: "auto" | "left" | "right" | "center" | "justify";
-  // lineheight?: number;
   children: string | string[];
-  // height?: number;
+  style?: StyleProp<TextStyle>;
 };
 const TextCustom = ({
   family = "Signika-Regular",
   size = 16,
   color = colors.primary,
   textAlign = "center",
-  // lineheight = 1.2 * size,
   children,
-  // height,
+  style,
 }: Props) => {
   return (
     <Text
-      style={{
-        fontFamily: family,
-        fontSize: moderateScale(size),
-        color: color,
-        textAlign: textAlign,
-        // lineHeight: moderateScale(lineheight),
-        // height: height,
-      }}
+      style={[
+        {
+          fontFamily: family,
+          fontSize: moderateScale(size),
+          color: color,
+          textAlign: textAlign,
+        },
+        style,
+      ]}
     >
       {children}
     </Text>

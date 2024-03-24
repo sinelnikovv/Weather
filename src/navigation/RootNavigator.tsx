@@ -15,7 +15,7 @@ const RootNavigator = () => {
       <RootStack.Screen
         name='Cities'
         component={CitiesScreen}
-        options={{ title: "Weather" }}
+        options={{ headerShown: false }}
       />
     </RootStack.Navigator>
   );

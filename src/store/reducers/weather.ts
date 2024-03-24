@@ -8,7 +8,7 @@ export const weatherApi = createApi({
   endpoints: (builder) => ({
     getWeather: builder.query<any, { lat: number; lon: number }>({
       query: ({ lat, lon }) =>
-        `?lat=${lat}&lon=${lon}&exclude=hourly&units=metric&appid=f98a3418c294c0451a96467ba9d4dc6c`,
+        `?lat=${lat}&lon=${lon}&exclude=hourly,alerts&units=metric&appid=f98a3418c294c0451a96467ba9d4dc6c`,
     }),
   }),
 });

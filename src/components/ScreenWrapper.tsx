@@ -1,26 +1,49 @@
 import { StyleProp, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { moderateScale } from "react-native-size-matters";
+import { LinearGradient } from "expo-linear-gradient";
+
 type Props = {
   children: JSX.Element[] | JSX.Element;
   containerStyle?: StyleProp<ViewStyle>;
+  gradient?: boolean;
 };
-const ScreenWrapper = ({ children, containerStyle }: Props) => {
+const ScreenWrapper = ({
+  children,
+  containerStyle,
+  gradient = true,
+}: Props) => {
   const insets = useSafeAreaInsets();
+
+  const gradientColor = {
+    colors: ["rgb(46,51,90)", "rgb(28,27,51)"],
+    start: { x: 0, y: 0 },
+    end: { x: 1, y: 1 },
+  };
   return (
-    <View
-      style={[
-        {
-          marginTop: insets.top,
-          marginBottom: insets.bottom,
-          paddingHorizontal: moderateScale(16),
-          flex: 1,
-        },
-        containerStyle,
-      ]}
+    <LinearGradient
+      style={{ flex: 1 }}
+      {...(gradient
+        ? { ...gradientColor }
+        : {
+            colors: ["transparent", "transparent"],
+            start: { x: 0, y: 0 },
+            end: { x: 0, y: 0 },
+          })}
     >
-      {children}
-    </View>
+      <View
+        style={[
+          {
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            flex: 1,
+            position: "relative",
+          },
+          containerStyle,
+        ]}
+      >
+        {children}
+      </View>
+    </LinearGradient>
   );
 };
 
