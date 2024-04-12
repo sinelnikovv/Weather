@@ -206,7 +206,7 @@ const WeatherIconPicker = ({
     default:
       Icon = ClearDay;
   }
-  return <Icon height={moderateScale(140)} width={moderateScale(140)} />;
+  return <Icon height={moderateScale(120)} width={moderateScale(120)} />;
 };
 
 export default WeatherIconPicker;

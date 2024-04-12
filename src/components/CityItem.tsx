@@ -1,29 +1,22 @@
-import { Dimensions, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import TextCustom from "./TextCustom";
 import colors from "../utils/theme";
 import CityBackground from "../assets/images/cityItemBackground.svg";
 import WeatherIconPicker from "./WeatherIconPicker";
+import { SearchResponce } from "../store/reducers/geocodingSlice";
+import { useGetWeatherQuery } from "../store/reducers/weather";
 
 type Props = {
-  location: string;
-  tempCurrent: string;
-  maxTemp: number;
-  minTemp: number;
-  weather: string;
-  code: string;
-  isDay: boolean;
+  item: SearchResponce;
 };
 
-const CityItem = ({
-  location,
-  tempCurrent,
-  maxTemp,
-  minTemp,
-  weather,
-  code,
-  isDay,
-}: Props) => {
+const CityItem = ({ item }: Props) => {
+  const { data, error, isLoading } = useGetWeatherQuery({
+    lat: item.lat,
+    lon: item.lon,
+  });
+
   const width = Dimensions.get("screen").width;
   return (
     <View style={styles.item}>
@@ -38,30 +31,41 @@ const CityItem = ({
         width={width - moderateScale(32)}
         height={moderateScale(184)}
       />
-
-      <TextCustom style={{ marginTop: moderateScale(12) }} size={64}>
-        {tempCurrent.toString().split(".")[0]}&deg;
-      </TextCustom>
-      <TextCustom color={colors.greyDark} size={20} family='Signika-SemiBold'>
-        H:{Math.round(maxTemp).toString()} &deg; L:{" "}
-        {Math.round(minTemp).toString()}&deg;
-      </TextCustom>
-      <View
-        style={{
-          marginTop: moderateScale(6),
-          marginRight: moderateScale(16),
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignSelf: "stretch",
-        }}
-      >
-        <TextCustom size={17}>{location}</TextCustom>
-        <TextCustom size={17}> {weather} </TextCustom>
-      </View>
-
-      <View style={styles.img}>
-        <WeatherIconPicker code={code} isDay={isDay} />
-      </View>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <TextCustom style={{ marginTop: moderateScale(12) }} size={64}>
+            {data.current.temp.toString().split(".")[0]}&deg;
+          </TextCustom>
+          <TextCustom
+            color={colors.greyDark}
+            size={20}
+            family='Signika-SemiBold'
+          >
+            H:{Math.round(data.daily[0].temp.max).toString()} &deg; L:{" "}
+            {Math.round(data.daily[0].temp.min).toString()}&deg;
+          </TextCustom>
+          <View
+            style={{
+              marginTop: moderateScale(6),
+              marginRight: moderateScale(16),
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignSelf: "stretch",
+            }}
+          >
+            <TextCustom size={17}>{item.name}</TextCustom>
+            <TextCustom size={17}> {data.current.weather[0].main} </TextCustom>
+          </View>
+          <View style={styles.img}>
+            <WeatherIconPicker
+              code={data.current.weather[0].id.toString()}
+              isDay={data.current.weather[0].icon.includes("d")}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -73,6 +77,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingLeft: moderateScale(20),
     paddingBottom: moderateScale(20),
+    marginBottom: moderateScale(30),
   },
   img: {
     justifyContent: "flex-start",
