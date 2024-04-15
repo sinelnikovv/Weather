@@ -1,6 +1,17 @@
 import HomeScreen from "../screens/HomeScreen";
 import CitiesScreen from "../screens/CitiesScreen";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  StackScreenProps,
+  createStackNavigator,
+} from "@react-navigation/stack";
+
+export type RootStackParamList = {
+  Home: undefined;
+  Cities: undefined;
+};
+
+export type RootStackNavigatorScreenProps<T extends keyof RootStackParamList> =
+  StackScreenProps<RootStackParamList, T>;
 
 const RootStack = createStackNavigator();
 

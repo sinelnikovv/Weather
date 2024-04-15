@@ -1,22 +1,20 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { SearchResponce } from "./geocodingSlice";
 
-export type location = {
-  lat: number;
-  lon: number;
-};
-
-const initialState: location = {
-  lat: 0,
-  lon: 0,
+const initialState: SearchResponce = {
+  lat: "0",
+  lon: "0",
+  name: "",
 };
 
 export const locationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
-    setLocation: (state, action: PayloadAction<location>) => {
+    setLocation: (state, action: PayloadAction<SearchResponce>) => {
       state.lat = action.payload.lat;
       state.lon = action.payload.lon;
+      state.name = action.payload.name;
     },
   },
 });

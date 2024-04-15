@@ -3,7 +3,7 @@ import {
   View,
   TouchableOpacity,
   FlatList,
-  TextInput,
+  ActivityIndicator,
 } from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
 import Back from "../assets/svg/back.svg";
@@ -12,14 +12,10 @@ import { moderateScale } from "react-native-size-matters";
 import CityItem from "../components/CityItem";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../store";
-import { useState } from "react";
-import { LinearGradient } from "expo-linear-gradient";
-import Search from "../assets/svg/search.svg";
-import colors from "../utils/theme";
-import {
-  SearchResponce,
-  fetchCoordinates,
-} from "../store/reducers/geocodingSlice";
+import { SearchResponce } from "../store/reducers/geocodingSlice";
+import { setLocation } from "../store/reducers/locationSlice";
+import { RootStackNavigatorScreenProps } from "../navigation/RootNavigator";
+import Search from "../components/Search";
 
 const mockData: SearchResponce[] = [
   { name: "New York", lat: "40.7128", lon: "-74.006" },
@@ -28,18 +24,19 @@ const mockData: SearchResponce[] = [
   { name: "Tokyo", lat: "35.6895", lon: "139.6917" },
   { name: "Berlin", lat: "52.5200", lon: "13.4050" },
 ];
+type Props = RootStackNavigatorScreenProps<"Cities">;
 
-const CitiesScreen = ({ navigation }) => {
-  const [search, setSearch] = useState("");
-
+const CitiesScreen = ({ navigation }: Props) => {
   const locations = useSelector(
     (state: RootState) => state.geocodingSlice.data,
   );
   const dispatch = useAppDispatch();
-
-  const handleGetCoordinates = (text) => {
-    setSearch(text);
-    dispatch(fetchCoordinates(text));
+  const isLoading = useSelector(
+    (state: RootState) => state.geocodingSlice.status,
+  );
+  const onPressCityHandler = (item) => {
+    dispatch(setLocation(item));
+    navigation.navigate("Home");
   };
   return (
     <ScreenWrapper containerStyle={{ marginHorizontal: moderateScale(16) }}>
@@ -58,26 +55,25 @@ const CitiesScreen = ({ navigation }) => {
           Cities
         </TextCustom>
       </View>
-      <LinearGradient
-        colors={["#2E335A", "#1C1B33", "#2E335A"]}
-        start={{ x: 0.5, y: 2 }}
-        end={{ x: 0.5, y: -1 }}
-        style={styles.inputContainer}
-      >
-        <Search width={moderateScale(16)} height={moderateScale(16)} />
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => handleGetCoordinates(text)}
-          value={search}
-          placeholder='Search for a city or airport'
-          placeholderTextColor={colors.greyDark}
+      <Search />
+      {isLoading === "loading" ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size='large' />
+        </View>
+      ) : (
+        <FlatList
+          data={locations.length !== 0 ? locations : mockData}
+          keyExtractor={(_, index) => index.toString()}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => onPressCityHandler(item)}>
+              <CityItem item={item} />
+            </TouchableOpacity>
+          )}
         />
-      </LinearGradient>
-      <FlatList
-        data={search ? locations : mockData}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => <CityItem item={item} />}
-      />
+      )}
     </ScreenWrapper>
   );
 };
@@ -89,13 +85,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: moderateScale(7),
-    paddingHorizontal: moderateScale(8),
-    borderRadius: moderateScale(10),
-    marginBottom: moderateScale(20),
-  },
-  input: { marginLeft: moderateScale(5), color: colors.white },
 });

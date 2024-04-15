@@ -37,10 +37,15 @@ const AppMain = () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
         const currentLocation = await Location.getCurrentPositionAsync();
+        const response: { display_name: string } = await fetch(
+          `https://us1.locationiq.com/v1/reverse?key=YOUR_ACCESS_TOKEN&lat=${currentLocation.coords.latitude}&lon=${currentLocation.coords.longitude}&format=json`,
+        ).then((res) => res.json());
+
         dispatch(
           setLocation({
-            lat: currentLocation.coords.latitude,
-            lon: currentLocation.coords.longitude,
+            lat: currentLocation.coords.latitude.toString(),
+            lon: currentLocation.coords.longitude.toString(),
+            name: response.display_name,
           }),
         );
       }
