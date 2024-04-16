@@ -36,11 +36,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ marginTop: moderateScale(50) }}>
           {!!data ? (
             <MainInfo
-              city={
-                location.name
-                  ? location.name
-                  : data.timezone.split("/")[1].replace("_", " ")
-              }
+              city={data.timezone.split("/")[1].replace("_", " ")}
               currentTemp={data.current.temp}
               weather={data.current.weather[0].main}
               maxTemp={data.daily[0].temp.max}

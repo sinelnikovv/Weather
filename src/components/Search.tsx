@@ -5,16 +5,25 @@ import colors from "../utils/theme";
 import { fetchCoordinates } from "../store/reducers/geocodingSlice";
 import { useAppDispatch } from "../store";
 import SearchIcon from "../assets/svg/search.svg";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { debounce } from "lodash";
 
 const Search = () => {
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState("");
 
+  const debouncedSearch = useCallback(
+    debounce((text) => {
+      dispatch(fetchCoordinates(text));
+    }, 500),
+    [],
+  );
+
   const handleGetCoordinates = (text) => {
     setSearch(text);
-    dispatch(fetchCoordinates(text));
+    debouncedSearch(text);
   };
+
   return (
     <LinearGradient
       colors={["#2E335A", "#1C1B33", "#2E335A"]}

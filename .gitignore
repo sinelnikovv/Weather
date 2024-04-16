@@ -38,5 +38,5 @@ yarn-error.*
 
 #android
 *.apk
-
-
+Weather.app
+build*

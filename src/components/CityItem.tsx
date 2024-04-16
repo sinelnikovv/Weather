@@ -12,7 +12,7 @@ type Props = {
 };
 
 const CityItem = ({ item }: Props) => {
-  const { data, error, isLoading } = useGetWeatherQuery({
+  const { data, isLoading } = useGetWeatherQuery({
     lat: item.lat,
     lon: item.lon,
   });
