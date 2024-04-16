@@ -31,9 +31,11 @@ import { moderateScale } from "react-native-size-matters";
 const WeatherIconPicker = ({
   code,
   isDay = true,
+  size = 120,
 }: {
   code: string;
   isDay?: boolean;
+  size?: number;
 }) => {
   let Icon;
   switch (code) {
@@ -206,7 +208,7 @@ const WeatherIconPicker = ({
     default:
       Icon = ClearDay;
   }
-  return <Icon height={moderateScale(120)} width={moderateScale(120)} />;
+  return <Icon height={moderateScale(size)} width={moderateScale(size)} />;
 };
 
 export default WeatherIconPicker;

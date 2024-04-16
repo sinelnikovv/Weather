@@ -9,7 +9,7 @@ export const weatherApi = createApi({
   endpoints: (builder) => ({
     getWeather: builder.query<any, { lat: string; lon: string }>({
       query: ({ lat, lon }) =>
-        `?lat=${lat}&lon=${lon}&exclude=hourly,alerts&units=metric&appid=${Constants.expoConfig.extra.openWeatherId}`,
+        `?lat=${lat}&lon=${lon}&exclude=minutely,alerts&units=metric&appid=${Constants.expoConfig.extra.openWeatherId}`,
     }),
   }),
 });

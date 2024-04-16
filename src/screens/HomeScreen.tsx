@@ -1,4 +1,11 @@
-import { StyleSheet, View, ImageBackground, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ImageBackground,
+  Text,
+  Image,
+  FlatList,
+} from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
 import MainInfo from "../components/MainInfo";
 import Tabbar from "../components/TabBar";
@@ -10,6 +17,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useGetWeatherQuery } from "../store/reducers/weather";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import HourlyItem from "../components/HourlyItem";
+import colors from "../utils/theme";
 
 const HomeScreen = ({ navigation }) => {
   const location = useSelector((state: RootState) => state.location);
@@ -21,6 +30,8 @@ const HomeScreen = ({ navigation }) => {
   const { data, refetch } = useGetWeatherQuery(location);
 
   const handleSheetChanges = useCallback((index: number) => {}, []);
+
+  const hourly = data.hourly.slice(0, 24);
 
   useEffect(() => {
     refetch();
@@ -67,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
                 paddingTop: moderateScale(32),
                 borderTopLeftRadius: moderateScale(45),
                 borderTopRightRadius: moderateScale(45),
-                borderColor: "#fff",
+                borderColor: colors.white,
                 borderWidth: 0.2,
                 borderTopWidth: 1,
                 left: -1,
@@ -117,7 +128,23 @@ const HomeScreen = ({ navigation }) => {
                 end={{ x: 1, y: -1 }}
               />
               <View style={styles.contentContainer}>
-                <Text>Awesome 🎉</Text>
+                <FlatList
+                  data={hourly}
+                  keyExtractor={(item) => item.dt.toString()}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    paddingHorizontal: moderateScale(16),
+                  }}
+                  renderItem={({ item }) => (
+                    <HourlyItem
+                      time={item.dt}
+                      temp={item.temp}
+                      code={item.weather[0].id.toString()}
+                      isDay={item.weather[0].icon.includes("d")}
+                    />
+                  )}
+                />
               </View>
             </BlurView>
           </BottomSheet>
