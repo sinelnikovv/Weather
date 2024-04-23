@@ -16,7 +16,7 @@ const MainInfo = ({ city, currentTemp, weather, maxTemp, minTemp }: Props) => {
       <TextCustom size={34}>{city}</TextCustom>
       <View
         style={{
-          marginVertical: moderateScale(-30),
+          marginVertical: moderateScale(-20),
           paddingBottom: moderateScale(14),
         }}
       >
