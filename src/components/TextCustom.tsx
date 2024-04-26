@@ -1,6 +1,7 @@
 import { StyleProp, Text, TextStyle } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import colors from "../utils/theme";
+import Animated from "react-native-reanimated";
 type Props = {
   family?:
     | "Signika-Light"
@@ -23,7 +24,7 @@ const TextCustom = ({
   style,
 }: Props) => {
   return (
-    <Text
+    <Animated.Text
       style={[
         {
           fontFamily: family,
@@ -35,7 +36,7 @@ const TextCustom = ({
       ]}
     >
       {children}
-    </Text>
+    </Animated.Text>
   );
 };
 

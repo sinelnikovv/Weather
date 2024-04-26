@@ -2,7 +2,6 @@ import {
   StyleSheet,
   View,
   Image,
-  Dimensions,
   FlatList,
   ActivityIndicator,
   useWindowDimensions,
@@ -21,6 +20,7 @@ import { RootState } from "../store";
 import HourlyItem from "../components/HourlyItem";
 import colors from "../utils/theme";
 import Animated, {
+  Extrapolate,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
@@ -67,15 +67,58 @@ const HomeScreen = ({ navigation }) => {
       opacity: opacity,
     };
   });
+  const backgroundColor = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      bottomSheetPosition.value,
+      [windowHeight * 0.6, windowHeight * 0.2],
+      [0, 1],
+    );
 
+    return {
+      opacity: opacity,
+    };
+  });
+  const borderRadius = useAnimatedStyle(() => {
+    const radius = interpolate(
+      bottomSheetPosition.value,
+      [windowHeight * 0.6, windowHeight * 0.2],
+      [45, 1],
+      Extrapolate.EXTEND,
+    );
+
+    return {
+      borderTopLeftRadius: radius,
+      borderTopRightRadius: radius,
+    };
+  });
+
+  const borderColor = useAnimatedStyle(() => {
+    const radius = interpolate(
+      bottomSheetPosition.value,
+      [windowHeight * 0.6, windowHeight * 0.2],
+      [0.8, 0],
+      Extrapolate.EXTEND,
+    );
+
+    return {
+      borderColor: `rgba(255, 255, 255, ${radius})`,
+    };
+  });
   return (
-    <ScreenWrapper gradient={true}>
+    <ScreenWrapper>
       <Animated.Image
         source={require("../assets/images/background.png")}
         resizeMode='cover'
         style={[styles.background, backgroundStyle]}
       />
-      <View style={styles.mainInfoContainer}>
+      <Animated.View
+        style={[
+          styles.background,
+          { backgroundColor: "#422E5A" },
+          backgroundColor,
+        ]}
+      />
+      <View>
         {data && (
           <MainInfo
             city={data.timezone.split("/")[1].replace("_", " ")}
@@ -83,6 +126,7 @@ const HomeScreen = ({ navigation }) => {
             weather={data.current.weather[0].main}
             maxTemp={data.daily[0].temp.max}
             minTemp={data.daily[0].temp.min}
+            bottomSheetPosition={bottomSheetPosition}
           />
         )}
       </View>
@@ -94,7 +138,13 @@ const HomeScreen = ({ navigation }) => {
           backgroundStyle={styles.none}
           handleIndicatorStyle={styles.handleIndicator}
         >
-          <BlurView intensity={20} tint='dark' style={styles.blurView}>
+          <Animated.View style={[styles.blurView, borderRadius, borderColor]}>
+            <LinearGradient
+              style={styles.linearGradient}
+              colors={["rgba(86, 46, 90, 0.3)", "rgba(28, 27, 51, 0.3)"]}
+              start={{ x: 0, y: 0.6 }}
+              end={{ x: 1, y: -1 }}
+            />
             <Image
               style={styles.absoluteImage}
               source={require("../assets/svg/white.png")}
@@ -107,13 +157,7 @@ const HomeScreen = ({ navigation }) => {
               style={styles.roundGradientImage}
               source={require("../assets/images/roundGradient.png")}
             />
-
-            <LinearGradient
-              style={styles.linearGradient}
-              colors={["rgba(86, 46, 90, 0.3)", "rgba(28, 27, 51, 0.3)"]}
-              start={{ x: 0, y: 0.6 }}
-              end={{ x: 1, y: -1 }}
-            />
+            <BlurView intensity={20} tint='dark' />
             <View style={styles.contentContainer}>
               {isFetching || isLoading ? (
                 <View
@@ -142,7 +186,7 @@ const HomeScreen = ({ navigation }) => {
                 />
               )}
             </View>
-          </BlurView>
+          </Animated.View>
         </BottomSheet>
       </View>
       <View style={styles.tabbarContainer}>
@@ -166,9 +210,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  mainInfoContainer: {
-    marginTop: moderateScale(50),
-  },
   containerSheet: {
     position: "absolute",
     bottom: 0,
@@ -189,9 +230,6 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(45),
     overflow: "hidden",
     paddingTop: moderateScale(32),
-    borderTopLeftRadius: moderateScale(45),
-    borderTopRightRadius: moderateScale(45),
-    borderColor: colors.white,
     borderWidth: 0.2,
     borderTopWidth: 1,
     left: -1,
