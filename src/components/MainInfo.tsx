@@ -31,7 +31,7 @@ const MainInfo = ({
   const titlePosition = useAnimatedStyle(() => {
     const position = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0, 50],
       Extrapolate.EXTEND,
     );
@@ -43,13 +43,13 @@ const MainInfo = ({
   const daily = useAnimatedStyle(() => {
     const positionBottom = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0, 70],
       Extrapolate.EXTEND,
     );
     const positionLeft = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [-95, 0],
       Extrapolate.EXTEND,
     );
@@ -62,13 +62,13 @@ const MainInfo = ({
   const weatherStyle = useAnimatedStyle(() => {
     const positionBottom = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0, 70],
       Extrapolate.EXTEND,
     );
     const opacity = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [1, 0],
       Extrapolate.EXTEND,
     );
@@ -83,25 +83,25 @@ const MainInfo = ({
   const tempSmall = useAnimatedStyle(() => {
     const positionBottom = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [125, 70],
       Extrapolate.EXTEND,
     );
     const positionLeft = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [95, 0],
       Extrapolate.EXTEND,
     );
     const fontSize = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [84, 20],
       Extrapolate.EXTEND,
     );
     const opacity = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0, 1],
       Extrapolate.EXTEND,
     );
@@ -116,25 +116,25 @@ const MainInfo = ({
   const tempBig = useAnimatedStyle(() => {
     const positionBottom = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0, 25],
       Extrapolate.EXTEND,
     );
     const positionLeft = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
-      [0, -70],
+      [windowHeight * 0.6, windowHeight * 0.13],
+      [10, -70],
       Extrapolate.EXTEND,
     );
     const fontSize = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [84, 20],
       Extrapolate.EXTEND,
     );
     const opacity = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [1, 0],
       Extrapolate.EXTEND,
     );

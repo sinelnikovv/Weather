@@ -40,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
   const windowHeight = height;
 
   const snapPoints = useMemo(
-    () => [windowHeight * 0.4, windowHeight * 0.8],
+    () => [windowHeight * 0.4, windowHeight * 0.87],
     [],
   );
 
@@ -48,13 +48,13 @@ const HomeScreen = ({ navigation }) => {
   const backgroundStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0, -windowHeight],
     );
 
     const opacity = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [1, 0],
     );
 
@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
   const backgroundColor = useAnimatedStyle(() => {
     const opacity = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0, 1],
     );
 
@@ -81,7 +81,7 @@ const HomeScreen = ({ navigation }) => {
   const borderRadius = useAnimatedStyle(() => {
     const radius = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [45, 1],
       Extrapolate.EXTEND,
     );
@@ -95,7 +95,7 @@ const HomeScreen = ({ navigation }) => {
   const borderColor = useAnimatedStyle(() => {
     const radius = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.2],
+      [windowHeight * 0.6, windowHeight * 0.13],
       [0.8, 0],
       Extrapolate.EXTEND,
     );
