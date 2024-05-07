@@ -1,4 +1,4 @@
-import { StyleProp, Text, TextStyle } from "react-native";
+import { StyleProp, TextStyle } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import colors from "../utils/theme";
 import Animated from "react-native-reanimated";

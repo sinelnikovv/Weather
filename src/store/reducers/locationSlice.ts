@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { SearchResponce } from "./geocodingSlice";
+import { SearchResponce } from "../../types";
 
 const initialState: SearchResponce = {
   lat: "0",

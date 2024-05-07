@@ -4,32 +4,15 @@ import TabBarBackground from "../assets/svg/tabBarBackground.svg";
 import PlusButton from "../assets/svg/PlusButton.svg";
 import LocationIcon from "../assets/svg/Location.svg";
 import ListIcon from "../assets/svg/List.svg";
-import * as Location from "expo-location";
-import { useDispatch, useSelector } from "react-redux";
-import { setLocation } from "../store/reducers/locationSlice";
 
-const Tabbar = ({ navigation }) => {
-  const dispatch = useDispatch();
+type Props = {
+  navigation: any;
+  getCurrentLocation: () => void;
+};
 
-  const getLocation = async () => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        const currentLocation = await Location.getCurrentPositionAsync();
-        dispatch(
-          setLocation({
-            lat: currentLocation.coords.latitude,
-            lon: currentLocation.coords.longitude,
-          }),
-        );
-      }
-    } catch (error) {
-      console.error("Error requesting location permission:", error);
-    }
-  };
-
+const Tabbar = ({ navigation, getCurrentLocation }: Props) => {
   return (
-    <View style={{ height: moderateScale(100), zIndex: 2 }}>
+    <View style={{ height: 100, zIndex: 2 }}>
       <View
         style={{
           flexDirection: "row",
@@ -38,7 +21,7 @@ const Tabbar = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <Pressable onPress={() => getLocation()}>
+        <Pressable onPress={() => getCurrentLocation()}>
           <LocationIcon />
         </Pressable>
         <Pressable style={{ bottom: moderateScale(8) }}>

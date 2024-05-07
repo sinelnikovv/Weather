@@ -4,8 +4,8 @@ import TextCustom from "./TextCustom";
 import colors from "../utils/theme";
 import CityBackground from "../assets/images/cityItemBackground.svg";
 import WeatherIconPicker from "./WeatherIconPicker";
-import { SearchResponce } from "../store/reducers/geocodingSlice";
-import { useGetWeatherQuery } from "../store/reducers/weather";
+import { useGetWeatherQuery } from "../store/reducers/weatherAPI";
+import { SearchResponce } from "../types";
 
 type Props = {
   item: SearchResponce;

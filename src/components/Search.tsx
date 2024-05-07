@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import colors from "../utils/theme";
 import { fetchCoordinates } from "../store/reducers/geocodingSlice";
@@ -19,7 +19,7 @@ const Search = () => {
     [],
   );
 
-  const handleGetCoordinates = (text) => {
+  const handleGetCoordinates = (text: string) => {
     setSearch(text);
     debouncedSearch(text);
   };

@@ -12,10 +12,10 @@ import { moderateScale } from "react-native-size-matters";
 import CityItem from "../components/CityItem";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../store";
-import { SearchResponce } from "../store/reducers/geocodingSlice";
 import { setLocation } from "../store/reducers/locationSlice";
 import { RootStackNavigatorScreenProps } from "../navigation/RootNavigator";
 import Search from "../components/Search";
+import { SearchResponce } from "../types";
 
 const mockData: SearchResponce[] = [
   { name: "New York", lat: "40.7128", lon: "-74.006" },
@@ -27,15 +27,21 @@ const mockData: SearchResponce[] = [
 type Props = RootStackNavigatorScreenProps<"Cities">;
 
 const CitiesScreen = ({ navigation }: Props) => {
-  const locations = useSelector(
-    (state: RootState) => state.geocodingSlice.data,
-  );
+  const locations = useSelector((state: RootState) => state.geocoding.data);
   const dispatch = useAppDispatch();
-  const isLoading = useSelector(
-    (state: RootState) => state.geocodingSlice.status,
-  );
-  const onPressCityHandler = (item) => {
-    dispatch(setLocation(item));
+  const isLoading = useSelector((state: RootState) => state.geocoding.status);
+  const onPressCityHandler = async (item) => {
+    const response = await fetch(
+      `https://us1.locationiq.com/v1/reverse?key=pk.0e1ce1fb5b5bcae2803eef081c2d6846&lat=${item.lat}&lon=${item.lon}&format=json`,
+    ).then((res) => res.json());
+
+    dispatch(
+      setLocation({
+        lat: response.lat,
+        lon: response.lon,
+        name: response.address.city,
+      }),
+    );
     navigation.navigate("Home");
   };
   return (

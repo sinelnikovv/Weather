@@ -1,18 +1,7 @@
-// geocodingSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-export type SearchResponce = {
-  name: string;
-  lat: string;
-  lon: string;
-};
+import { SearchResponce, geocodingInitialState } from "../../types";
 
-type initialStateType = {
-  data: SearchResponce[];
-  status: "idle" | "loading" | "succeeded" | "failed";
-  error: string | null;
-};
-
-const initialState: initialStateType = {
+const initialState: geocodingInitialState = {
   data: [],
   status: "idle",
   error: null,

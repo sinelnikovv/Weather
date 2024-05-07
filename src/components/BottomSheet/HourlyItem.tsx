@@ -1,17 +1,17 @@
 import { View, StyleSheet } from "react-native";
-import TextCustom from "./TextCustom";
-import WeatherIconPicker from "./WeatherIconPicker";
-import colors from "../utils/theme";
+import TextCustom from "../TextCustom";
+import WeatherIconPicker from "../WeatherIconPicker";
+import colors from "../../utils/theme";
 import { moderateScale } from "react-native-size-matters";
-import { useGetWeatherQuery } from "../store/reducers/weather";
-import { RootState } from "../store";
+import { useGetWeatherQuery } from "../../store/reducers/weatherAPI";
+import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import moment from "moment";
 
 type Props = {
   temp: number;
   code: string;
-  time: string;
+  time: number;
   isDay: boolean;
 };
 const HourlyItem = ({ temp, code, time, isDay }: Props) => {
@@ -31,8 +31,15 @@ const HourlyItem = ({ temp, code, time, isDay }: Props) => {
 
   const isNow = nowLocal.isSame(localTime, "hour");
 
+  const selectedWeather = useSelector(
+    (state: RootState) => state.selectedWeather,
+  );
+
+  const isSelected = selectedWeather.dt === time;
   return (
-    <View style={[styles.container, isNow && { backgroundColor: colors.blue }]}>
+    <View
+      style={[styles.container, isSelected && { backgroundColor: colors.blue }]}
+    >
       <TextCustom
         family='Signika-SemiBold'
         size={15}

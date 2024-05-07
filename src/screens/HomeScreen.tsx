@@ -1,9 +1,7 @@
 import {
+  ActivityIndicator,
   StyleSheet,
   View,
-  Image,
-  FlatList,
-  ActivityIndicator,
   useWindowDimensions,
 } from "react-native";
 import ScreenWrapper from "../components/ScreenWrapper";
@@ -11,25 +9,64 @@ import MainInfo from "../components/MainInfo";
 import Tabbar from "../components/TabBar";
 import { moderateScale } from "react-native-size-matters";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { useEffect, useMemo, useRef } from "react";
-import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
-import { useGetWeatherQuery } from "../store/reducers/weather";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useGetWeatherQuery } from "../store/reducers/weatherAPI";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
-import HourlyItem from "../components/HourlyItem";
-import colors from "../utils/theme";
+import { RootState, useAppDispatch } from "../store";
 import Animated, {
-  Extrapolate,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
+import BottomSheetContent from "../components/BottomSheet/BottomSheetContent";
+import * as Location from "expo-location";
+import { setLocation } from "../store/reducers/locationSlice";
+import colors from "../utils/theme";
 
 const HomeScreen = ({ navigation }) => {
   const location = useSelector((state: RootState) => state.location);
-  const { data, refetch, isLoading, isFetching } = useGetWeatherQuery(location);
-  const hourly = data?.hourly?.slice(0, 24);
+  const { data, refetch } = useGetWeatherQuery(location);
+  const dispatch = useAppDispatch();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const requestLocationPermission = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+    } catch (error) {
+      console.error("Error requesting location permission:", error);
+    }
+  };
+
+  const getCurrentLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        setIsLoading(true);
+        const currentLocation = await Location.getCurrentPositionAsync();
+        const response = await fetch(
+          `https://us1.locationiq.com/v1/reverse?key=pk.0e1ce1fb5b5bcae2803eef081c2d6846&lat=${currentLocation.coords.latitude}&lon=${currentLocation.coords.longitude}&format=json`,
+        ).then((res) => res.json());
+
+        dispatch(
+          setLocation({
+            lat: currentLocation.coords.latitude.toString(),
+            lon: currentLocation.coords.longitude.toString(),
+            name: response.address.city,
+          }),
+        );
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error requesting location permission:", error);
+    }
+  };
+
+  const [isOpened, setIsOpened] = useState(false);
+
+  useEffect(() => {
+    requestLocationPermission();
+    getCurrentLocation();
+  }, []);
 
   useEffect(() => {
     refetch();
@@ -37,24 +74,20 @@ const HomeScreen = ({ navigation }) => {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { height } = useWindowDimensions();
-  const windowHeight = height;
 
-  const snapPoints = useMemo(
-    () => [windowHeight * 0.4, windowHeight * 0.87],
-    [],
-  );
+  const snapPoints = useMemo(() => [height * 0.37, height * 0.87], []);
 
   const bottomSheetPosition = useSharedValue(0);
   const backgroundStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.13],
-      [0, -windowHeight],
+      [height * 0.63, height * 0.13],
+      [0, -height],
     );
 
     const opacity = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.13],
+      [height * 0.4, height * 0.13],
       [1, 0],
     );
 
@@ -70,7 +103,7 @@ const HomeScreen = ({ navigation }) => {
   const backgroundColor = useAnimatedStyle(() => {
     const opacity = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.13],
+      [height * 0.63, height * 0.13],
       [0, 1],
     );
 
@@ -78,32 +111,23 @@ const HomeScreen = ({ navigation }) => {
       opacity: opacity,
     };
   });
-  const borderRadius = useAnimatedStyle(() => {
-    const radius = interpolate(
+
+  const tabBarPosition = useAnimatedStyle(() => {
+    const translateY = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.13],
-      [45, 1],
-      Extrapolate.EXTEND,
+      [height * 0.63, height * 0.13],
+      [0, 100],
     );
 
     return {
-      borderTopLeftRadius: radius,
-      borderTopRightRadius: radius,
+      transform: [
+        {
+          translateY,
+        },
+      ],
     };
   });
 
-  const borderColor = useAnimatedStyle(() => {
-    const radius = interpolate(
-      bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.13],
-      [0.8, 0],
-      Extrapolate.EXTEND,
-    );
-
-    return {
-      borderColor: `rgba(255, 255, 255, ${radius})`,
-    };
-  });
   return (
     <ScreenWrapper>
       <Animated.Image
@@ -118,10 +142,28 @@ const HomeScreen = ({ navigation }) => {
           backgroundColor,
         ]}
       />
+      {isLoading && (
+        <View
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            flex: 1,
+            zIndex: 99,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        >
+          <ActivityIndicator size='large' color={colors.white} />
+        </View>
+      )}
       <View>
         {data && (
           <MainInfo
-            city={data.timezone.split("/")[1].replace("_", " ")}
+            city={location.name ? location.name : data.timezone.split("/")[1]}
             currentTemp={data.current.temp}
             weather={data.current.weather[0].main}
             maxTemp={data.daily[0].temp.max}
@@ -137,61 +179,23 @@ const HomeScreen = ({ navigation }) => {
           ref={bottomSheetRef}
           backgroundStyle={styles.none}
           handleIndicatorStyle={styles.handleIndicator}
+          onChange={(index) => {
+            index === 1 && setIsOpened(true);
+            index === 0 && setIsOpened(false);
+          }}
         >
-          <Animated.View style={[styles.blurView, borderRadius, borderColor]}>
-            <LinearGradient
-              style={styles.linearGradient}
-              colors={["rgba(86, 46, 90, 0.3)", "rgba(28, 27, 51, 0.3)"]}
-              start={{ x: 0, y: 0.6 }}
-              end={{ x: 1, y: -1 }}
-            />
-            <Image
-              style={styles.absoluteImage}
-              source={require("../assets/svg/white.png")}
-            />
-            <Image
-              style={styles.absoluteImage}
-              source={require("../assets/svg/purple.png")}
-            />
-            <Image
-              style={styles.roundGradientImage}
-              source={require("../assets/images/roundGradient.png")}
-            />
-            <BlurView intensity={20} tint='dark' />
-            <View style={styles.contentContainer}>
-              {isFetching || isLoading ? (
-                <View
-                  style={{
-                    flex: 1,
-                    top: moderateScale(50),
-                  }}
-                >
-                  <ActivityIndicator size='large' color={colors.white} />
-                </View>
-              ) : (
-                <FlatList
-                  data={hourly}
-                  keyExtractor={(item) => item.dt.toString()}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.flatListContent}
-                  renderItem={({ item }) => (
-                    <HourlyItem
-                      time={item.dt}
-                      temp={item.temp}
-                      code={item.weather[0].id.toString()}
-                      isDay={item.weather[0].icon.includes("d")}
-                    />
-                  )}
-                />
-              )}
-            </View>
-          </Animated.View>
+          <BottomSheetContent
+            isOpened={isOpened}
+            bottomSheetPosition={bottomSheetPosition}
+          />
         </BottomSheet>
       </View>
-      <View style={styles.tabbarContainer}>
-        <Tabbar navigation={navigation} />
-      </View>
+      <Animated.View style={[styles.tabbarContainer, tabBarPosition]}>
+        <Tabbar
+          getCurrentLocation={getCurrentLocation}
+          navigation={navigation}
+        />
+      </Animated.View>
     </ScreenWrapper>
   );
 };
@@ -225,43 +229,6 @@ const styles = StyleSheet.create({
     height: moderateScale(5),
     width: moderateScale(48),
     backgroundColor: "rgba(0, 0, 0, 0.3)",
-  },
-  blurView: {
-    borderRadius: moderateScale(45),
-    overflow: "hidden",
-    paddingTop: moderateScale(32),
-    borderWidth: 0.2,
-    borderTopWidth: 1,
-    left: -1,
-    right: -1,
-    top: 0,
-    bottom: 0,
-    position: "absolute",
-    alignItems: "center",
-  },
-  absoluteImage: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-  },
-  roundGradientImage: {
-    position: "absolute",
-    right: 0,
-    bottom: 400,
-  },
-  linearGradient: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  flatListContent: {
-    paddingHorizontal: moderateScale(16),
   },
   tabbarContainer: {
     position: "absolute",

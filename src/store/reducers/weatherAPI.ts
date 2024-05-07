@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Constants from "expo-constants";
+import { WeatherData } from "../../types";
 
 export const weatherApi = createApi({
   reducerPath: "weatherApi",
@@ -7,7 +8,7 @@ export const weatherApi = createApi({
     baseUrl: "https://api.openweathermap.org/data/3.0/onecall",
   }),
   endpoints: (builder) => ({
-    getWeather: builder.query<any, { lat: string; lon: string }>({
+    getWeather: builder.query<WeatherData, { lat: string; lon: string }>({
       query: ({ lat, lon }) =>
         `?lat=${lat}&lon=${lon}&exclude=minutely,alerts&units=metric&appid=${Constants.expoConfig.extra.openWeatherId}`,
     }),
