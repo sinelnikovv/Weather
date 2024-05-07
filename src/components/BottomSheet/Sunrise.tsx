@@ -18,6 +18,7 @@ import DetailText from "../DetailsItem/DetailText";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useGetWeatherQuery } from "../../store/reducers/weatherAPI";
+import { formatUnixTime } from "../../utils/formatTime";
 
 const Sunrise = () => {
   const [width, setWidth] = useState<number>(100);
@@ -41,7 +42,7 @@ const Sunrise = () => {
     return interpolatedValue;
   };
 
-  const currentTimeUnix = Date.now() / 1000 + data.timezone_offset;
+  const currentTimeUnix = selectedWeather.dt;
   const sunriseTimeUnix = selectedWeather.sunrise;
   const sunsetTimeUnix = selectedWeather.sunset;
 
@@ -64,10 +65,20 @@ const Sunrise = () => {
   const dotX = (value + 180) * (width / 360);
   const dotY = 25 * (1 - Math.cos((value * Math.PI) / 180));
 
+  const sunriseTime = formatUnixTime(
+    selectedWeather.sunrise,
+    data.timezone_offset,
+  );
+
+  const sunsetTime = formatUnixTime(
+    selectedWeather.sunset,
+    data.timezone_offset,
+  );
+
   return (
     <DetailContainer containerStyle={styles.container}>
       <DetailTitle style={styles.text}>Sunrise</DetailTitle>
-      <DetailText>5:28AM</DetailText>
+      <DetailText>{sunriseTime}</DetailText>
       <View
         style={styles.svgContainer}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
@@ -120,7 +131,7 @@ const Sunrise = () => {
           <Circle cx={dotX} cy={dotY} r='10' fill='url(#grad)' />
         </Svg>
       </View>
-      <TextCustom textAlign='left'>Sunset: 7:25PM</TextCustom>
+      <TextCustom textAlign='left'>Sunset: {sunsetTime}</TextCustom>
     </DetailContainer>
   );
 };

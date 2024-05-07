@@ -16,6 +16,7 @@ import { setLocation } from "../store/reducers/locationSlice";
 import { RootStackNavigatorScreenProps } from "../navigation/RootNavigator";
 import Search from "../components/Search";
 import { SearchResponce } from "../types";
+import { useState } from "react";
 
 const mockData: SearchResponce[] = [
   { name: "New York", lat: "40.7128", lon: "-74.006" },
@@ -27,6 +28,8 @@ const mockData: SearchResponce[] = [
 type Props = RootStackNavigatorScreenProps<"Cities">;
 
 const CitiesScreen = ({ navigation }: Props) => {
+  const [search, setSearch] = useState("");
+
   const locations = useSelector((state: RootState) => state.geocoding.data);
   const dispatch = useAppDispatch();
   const isLoading = useSelector((state: RootState) => state.geocoding.status);
@@ -52,8 +55,7 @@ const CitiesScreen = ({ navigation }: Props) => {
         </TouchableOpacity>
         <TextCustom
           style={{
-            marginLeft: moderateScale(5),
-            marginBottom: moderateScale(20),
+            marginLeft: moderateScale(15),
           }}
           textAlign='left'
           size={28}
@@ -61,7 +63,7 @@ const CitiesScreen = ({ navigation }: Props) => {
           Cities
         </TextCustom>
       </View>
-      <Search />
+      <Search search={search} setSearch={setSearch} />
       {isLoading === "loading" ? (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -70,7 +72,9 @@ const CitiesScreen = ({ navigation }: Props) => {
         </View>
       ) : (
         <FlatList
-          data={locations.length !== 0 ? locations : mockData}
+          data={
+            locations.length === 0 || search.length === 0 ? mockData : locations
+          }
           keyExtractor={(_, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
@@ -90,5 +94,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: moderateScale(20),
   },
 });

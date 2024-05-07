@@ -12,7 +12,7 @@ type Props = {
   size?: number;
   color?: string;
   textAlign?: "auto" | "left" | "right" | "center" | "justify";
-  children: string | string[];
+  children: React.ReactNode | JSX.Element[] | JSX.Element;
   style?: StyleProp<TextStyle>;
 };
 const TextCustom = ({

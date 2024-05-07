@@ -95,7 +95,9 @@ const PollutionComponent = ({
           </TextCustom>
         </View>
       </View>
-      <Range value={range} />
+      <View style={{ marginVertical: moderateScale(10) }}>
+        <Range value={range} />
+      </View>
     </View>
   );
 };

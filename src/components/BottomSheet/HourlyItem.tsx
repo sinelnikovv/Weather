@@ -7,6 +7,7 @@ import { useGetWeatherQuery } from "../../store/reducers/weatherAPI";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { formatUnixTime, getLocalTime } from "../../utils/formatTime";
 
 type Props = {
   temp: number;
@@ -14,28 +15,27 @@ type Props = {
   time: number;
   isDay: boolean;
 };
+
 const HourlyItem = ({ temp, code, time, isDay }: Props) => {
   const location = useSelector((state: RootState) => state.location);
   const { data } = useGetWeatherQuery(location);
 
-  const unixTimestamp = time;
   const timezoneOffset = data.timezone_offset;
 
-  const timestampInMilliseconds = +unixTimestamp * 1000;
-  const localTime = moment
-    .utc(timestampInMilliseconds)
-    .add(timezoneOffset, "seconds");
-  const formattedTime = localTime.format("HH:mm");
+  const formattedTime = formatUnixTime(time, timezoneOffset);
+  const nowLocal = getLocalTime(timezoneOffset);
 
-  const nowLocal = moment.utc().add(timezoneOffset, "seconds");
-
-  const isNow = nowLocal.isSame(localTime, "hour");
+  const isNow = nowLocal.isSame(
+    moment.utc(time * 1000).add(timezoneOffset, "seconds"),
+    "hour",
+  );
 
   const selectedWeather = useSelector(
     (state: RootState) => state.selectedWeather,
   );
 
   const isSelected = selectedWeather.dt === time;
+
   return (
     <View
       style={[styles.container, isSelected && { backgroundColor: colors.blue }]}

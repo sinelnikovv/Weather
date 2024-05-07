@@ -5,12 +5,16 @@ import colors from "../utils/theme";
 import { fetchCoordinates } from "../store/reducers/geocodingSlice";
 import { useAppDispatch } from "../store";
 import SearchIcon from "../assets/svg/search.svg";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { debounce } from "lodash";
 
-const Search = () => {
+type Props = {
+  search: string;
+  setSearch: (text: string) => void;
+};
+
+const Search = ({ search, setSearch }: Props) => {
   const dispatch = useAppDispatch();
-  const [search, setSearch] = useState("");
 
   const debouncedSearch = useCallback(
     debounce((text) => {

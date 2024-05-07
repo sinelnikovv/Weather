@@ -32,7 +32,17 @@ const CityItem = ({ item }: Props) => {
         height={moderateScale(184)}
       />
       {isLoading ? (
-        <ActivityIndicator />
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            height: moderateScale(184),
+          }}
+        >
+          <ActivityIndicator />
+        </View>
       ) : (
         <>
           <TextCustom style={{ marginTop: moderateScale(12) }} size={64}>

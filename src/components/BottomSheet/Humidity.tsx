@@ -8,11 +8,12 @@ type Props = {
   humidity: number;
   dew: number;
 };
+
 const Humidity = ({ humidity, dew }: Props) => {
   return (
     <DetailContainer containerStyle={styles.container}>
       <DetailTitle style={styles.text}>HUMIDITY</DetailTitle>
-      <DetailText style={styles.second}>{`${humidity}%`}</DetailText>
+      <DetailText style={styles.second}>{humidity.toString()}</DetailText>
       <DetailText style={styles.subtext}>
         {`The dew point is ${Math.round(dew).toString()} right now`}
       </DetailText>

@@ -17,6 +17,7 @@ type Props = {
   minTemp: number;
   bottomSheetPosition: SharedValue<number>;
 };
+
 const MainInfo = ({
   city,
   currentTemp,
@@ -31,7 +32,7 @@ const MainInfo = ({
   const titlePosition = useAnimatedStyle(() => {
     const position = interpolate(
       bottomSheetPosition.value,
-      [windowHeight * 0.6, windowHeight * 0.13],
+      [height * 0.6, windowHeight * 0.13],
       [0, 50],
       Extrapolate.EXTEND,
     );

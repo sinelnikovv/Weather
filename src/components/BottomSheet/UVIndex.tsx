@@ -4,6 +4,7 @@ import DetailTitle from "../DetailsItem/DetailTitle";
 import DetailText from "../DetailsItem/DetailText";
 import Range from "../DetailsItem/Range";
 import { moderateScale } from "react-native-size-matters";
+import { UVIndexes, getUVIndex } from "../../utils/getUVIndex";
 
 type Props = {
   value: number;
@@ -11,20 +12,8 @@ type Props = {
 
 const UVIndex = ({ value }: Props) => {
   const index = value.toString();
-  let UVText;
-  if (value < 3) {
-    UVText = "Low";
-  } else if (value < 6) {
-    UVText = "Moderate";
-  } else if (value < 8) {
-    UVText = "High";
-  } else if (value < 11) {
-    UVText = "Very high";
-  } else if (value >= 11) {
-    UVText = "Extreme";
-  } else {
-    UVText = "Moderate";
-  }
+  const UVText = getUVIndex(value, UVIndexes);
+
   const rangeValue = (value / 11) * 100;
   return (
     <DetailContainer containerStyle={styles.container}>

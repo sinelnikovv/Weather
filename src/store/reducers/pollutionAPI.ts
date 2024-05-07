@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Constants from "expo-constants";
-import { AirQualityResponse, WeatherData } from "../../types";
+import { AirQualityResponse } from "../../types";
 
 export const pollutionApi = createApi({
   reducerPath: "pollutionApi",

@@ -115,7 +115,7 @@ const Compass = ({ deg = 90, speed = 0 }) => {
         textAnchor='middle'
         fill='white'
       >
-        9.7
+        {speed.toFixed(0)}
       </Text>
       <Text
         x={radius}
@@ -124,7 +124,7 @@ const Compass = ({ deg = 90, speed = 0 }) => {
         textAnchor='middle'
         fill='white'
       >
-        km\h
+        m\s
       </Text>
     </Svg>
   );
