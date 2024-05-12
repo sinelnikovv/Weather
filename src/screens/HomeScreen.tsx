@@ -21,7 +21,7 @@ import Animated, {
 import BottomSheetContent from "../components/BottomSheet/BottomSheetContent";
 import * as Location from "expo-location";
 import { setLocation } from "../store/reducers/locationSlice";
-import colors from "../utils/theme";
+import { colors } from "../utils/theme";
 
 const HomeScreen = ({ navigation }) => {
   const location = useSelector((state: RootState) => state.location);

@@ -33,6 +33,7 @@ import Humidity from "./Humidity";
 import { setSelectedWeather } from "../../store/reducers/selectedWeatherSlice";
 import { useEffect, useRef } from "react";
 import { useGetPollutionQuery } from "../../store/reducers/pollutionAPI";
+import { gradient } from "../../utils/theme";
 
 type Props = {
   bottomSheetPosition: SharedValue<number>;
@@ -134,9 +135,7 @@ const BottomSheetContent = ({ bottomSheetPosition, isOpened }: Props) => {
     <Animated.View style={[styles.blurView, borderRadius, borderColor]}>
       <LinearGradient
         style={styles.linearGradient}
-        colors={["rgba(86, 46, 90, 0.3)", "rgba(28, 27, 51, 0.3)"]}
-        start={{ x: 0, y: 0.6 }}
-        end={{ x: 1, y: -1 }}
+        {...gradient.bottomSheetGradient}
       />
       <Image
         style={styles.absoluteImage}

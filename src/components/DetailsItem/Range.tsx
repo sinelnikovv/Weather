@@ -1,5 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, View } from "react-native";
+import { gradient } from "../../utils/theme";
 
 type Props = {
   value?: number;
@@ -8,13 +9,7 @@ type Props = {
 const Range = ({ value = 0 }: Props) => {
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={["#0e00fe", "#ff0000"]}
-        start={{ x: 0, y: 0 }}
-        locations={[0.35, 1]}
-        end={{ x: 1, y: 0 }}
-        style={styles.line}
-      />
+      <LinearGradient {...gradient.rangeGradient} style={styles.line} />
       <View style={[styles.dot, { left: `${value}%` }]} />
     </View>
   );
