@@ -1,7 +1,7 @@
 import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import TextCustom from "./TextCustom";
-import colors from "../utils/theme";
+import { colors } from "../utils/theme";
 import CityBackground from "../assets/images/cityItemBackground.svg";
 import WeatherIconPicker from "./WeatherIconPicker";
 import { useGetWeatherQuery } from "../store/reducers/weatherAPI";

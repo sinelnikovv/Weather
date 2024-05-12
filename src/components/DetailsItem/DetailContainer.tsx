@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import colors from "../../utils/theme";
+import { colors } from "../../utils/theme";
 import { moderateScale } from "react-native-size-matters";
 
 type Props = {

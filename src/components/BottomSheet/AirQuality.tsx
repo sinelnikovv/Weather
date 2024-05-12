@@ -5,7 +5,7 @@ import DetailText from "../DetailsItem/DetailText";
 import Range from "../DetailsItem/Range";
 import TextCustom from "../TextCustom";
 import Chevron from "../../assets/svg/back.svg";
-import colors from "../../utils/theme";
+import { colors } from "../../utils/theme";
 import { moderateScale } from "react-native-size-matters";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";

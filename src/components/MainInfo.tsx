@@ -1,6 +1,6 @@
 import { StyleSheet, View, useWindowDimensions } from "react-native";
 import TextCustom from "./TextCustom";
-import colors from "../utils/theme";
+import { colors } from "../utils/theme";
 import { moderateScale } from "react-native-size-matters";
 import {
   Extrapolate,

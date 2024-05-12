@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import TextCustom from "../TextCustom";
 import WeatherIconPicker from "../WeatherIconPicker";
-import colors from "../../utils/theme";
+import { colors } from "../../utils/theme";
 import { moderateScale } from "react-native-size-matters";
 import { useGetWeatherQuery } from "../../store/reducers/weatherAPI";
 import { RootState } from "../../store";

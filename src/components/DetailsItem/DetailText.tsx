@@ -1,6 +1,6 @@
 import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 import TextCustom from "../TextCustom";
-import colors from "../../utils/theme";
+import { colors } from "../../utils/theme";
 
 type Props = {
   children: string;
