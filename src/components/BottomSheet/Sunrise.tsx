@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import Svg, {
-  Circle,
-  Defs,
-  Line,
-  Mask,
-  Path,
-  RadialGradient,
-  Rect,
-  Stop,
-} from "react-native-svg";
+import Svg, { Circle, Defs, Line, Mask, Path, Rect } from "react-native-svg";
 import DetailContainer from "../DetailsItem/DetailContainer";
 import DetailTitle from "../DetailsItem/DetailTitle";
 import TextCustom from "../TextCustom";
@@ -85,19 +76,6 @@ const Sunrise = () => {
       >
         <Svg height={50} width={width} viewBox={`0 -10 ${width} 60`}>
           <Defs>
-            <RadialGradient
-              id='grad'
-              cx={dotX.toString()}
-              cy={dotY.toString()}
-              rx='50%'
-              ry='50%'
-              fx={dotX.toString()}
-              fy={dotY.toString()}
-              gradientUnits='userSpaceOnUse'
-            >
-              <Stop offset='0%' stopColor='yellow' stopOpacity='1' />
-              <Stop offset='100%' stopColor='yellow' stopOpacity='0' />
-            </RadialGradient>
             <Mask id='maskAbove' x='0' y='0' height='25' width={width}>
               <Rect x='0' y='0' height='25' width={width} fill='white' />
             </Mask>
@@ -128,7 +106,12 @@ const Sunrise = () => {
             stroke='white'
             strokeWidth='1'
           />
-          <Circle cx={dotX} cy={dotY} r='10' fill='url(#grad)' />
+          <Circle
+            cx={dotX}
+            cy={dotY}
+            r='10'
+            fill={value > -90 && value < 90 ? "#fff" : "#adacac"}
+          />
         </Svg>
       </View>
       <TextCustom textAlign='left'>Sunset: {sunsetTime}</TextCustom>

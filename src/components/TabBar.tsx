@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import TabBarBackground from "../assets/svg/tabBarBackground.svg";
 import PlusButton from "../assets/svg/PlusButton.svg";
@@ -21,15 +21,15 @@ const Tabbar = ({ navigation, getCurrentLocation }: Props) => {
           alignItems: "center",
         }}
       >
-        <Pressable onPress={() => getCurrentLocation()}>
+        <TouchableOpacity onPress={() => getCurrentLocation()}>
           <LocationIcon />
-        </Pressable>
-        <Pressable style={{ bottom: moderateScale(8) }}>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ bottom: moderateScale(8) }}>
           <PlusButton />
-        </Pressable>
-        <Pressable onPress={() => navigation.navigate("Cities")}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Cities")}>
           <ListIcon />
-        </Pressable>
+        </TouchableOpacity>
       </View>
       <View style={{ position: "absolute", zIndex: -1 }}>
         <TabBarBackground height={moderateScale(100)} />
